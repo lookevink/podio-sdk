@@ -1,0 +1,1 @@
+This package is an unofficial sdk for Podio. There's an official one that I don't like. I'm building more out as needed to make my work at [Easy Street Offers](https://easystreetoffers.com) more efficient. No more, no less.
