@@ -52,9 +52,10 @@ export class podioClient {
   getApps(): this {
     let queryParams: string[] = [];
 
+    //todo: complete adding params dynamically
     const queryString =
       queryParams.length > 0 ? `?${queryParams.join("&")}` : "";
-    this.endpoint = `${this.baseUrl}/app/${queryString}`;
+    this.endpoint = `${this.baseUrl}/app/${queryString}?exclude_demo=true&limit=100`;
 
     return this;
   }
