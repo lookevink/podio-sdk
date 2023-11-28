@@ -5,6 +5,23 @@ describe("podioSDK", () => {
   const oAuthToken = process.env.PODIO_OAUTH_TOKEN!;
   const podio = new podioClient(oAuthToken);
 
+  it("should refresh token", async () => {
+    const clientId = process.env.PODIO_CLIENT_ID!;
+    const clientSecret = process.env.PODIO_CLIENT_SECRET!;
+    const refreshToken = process.env.PODIO_REFRESH_TOKEN!;
+
+    const { data, error } = await podio.refreshToken(
+      clientId,
+      clientSecret,
+      refreshToken
+    );
+
+    console.log(data, error);
+
+    expect(error).toBeNull();
+    expect(data).toBeDefined();
+  });
+
   it("should add an item", async () => {
     const appId = 28578294;
     const esoItem = {
@@ -86,7 +103,7 @@ describe("podioSDK", () => {
       // sortBy: "title",
       sortDesc: true,
       filters: { "motivation-level": [6] },
-      limit: 1000,
+      limit: 50,
     };
 
     const { data, error } = await podio
