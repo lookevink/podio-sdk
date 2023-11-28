@@ -118,6 +118,21 @@ describe("podioSDK", () => {
     expect(data).toBeNull();
   });
 
+  it("should search in app v2", async () => {
+    const appId = 29185294;
+    const searchOptions = {
+      query: "Alamo",
+      refType: "item",
+      limit: 50,
+    };
+    const { data, error } = await podio.searchInApp(appId, searchOptions).get();
+
+    console.log(data, error);
+
+    expect(error).toBeNull();
+    expect(data).toBeDefined();
+  });
+
   it("should get apps", async () => {
     const { data, error } = await podio.getApps().get();
 

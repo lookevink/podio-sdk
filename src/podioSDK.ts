@@ -72,6 +72,41 @@ export class podioClient {
     return this;
   }
 
+  searchInApp(
+    appId: AppId,
+    searchOptions: {
+      query: string;
+      refType?: string;
+      searchFields?: string[];
+      limit?: number;
+      offset?: number;
+      counts?: boolean;
+      highlights?: boolean;
+    }
+  ): this {
+    // Building the parameters object
+    const params: Record<string, string> = {
+      query: searchOptions.query,
+    };
+
+    if (searchOptions.refType) params["ref_type"] = searchOptions.refType;
+    if (searchOptions.searchFields)
+      params["search_fields"] = searchOptions.searchFields.join(",");
+    if (searchOptions.limit) params["limit"] = searchOptions.limit.toString();
+    if (searchOptions.offset)
+      params["offset"] = searchOptions.offset.toString();
+    if (searchOptions.counts)
+      params["counts"] = searchOptions.counts.toString();
+    if (searchOptions.highlights)
+      params["highlights"] = searchOptions.highlights.toString();
+
+    // Constructing the URL with parameters
+    this.endpoint = `${
+      this.baseUrl
+    }/search/app/${appId}/v2?${new URLSearchParams(params).toString()}`;
+    return this;
+  }
+
   getApps(): this {
     let queryParams: string[] = [];
 
