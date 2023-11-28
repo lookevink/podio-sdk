@@ -9,13 +9,51 @@ export class podioClient {
   private payload: any = null;
   private filter: any = null;
 
+  // Auth
   constructor(token: OAuthToken) {
     this.token = token;
   }
 
-  eq(field: string, value: string): this {
-    this.filter = { [field]: value };
-    return this;
+  // refresh token function does not require post()
+  async refreshToken(
+    clientId: string,
+    clientSecret: string,
+    refreshToken: string
+  ): Promise<{ data: any | null; error: Error | null }> {
+    this.endpoint = `${this.baseUrl}/oauth/token/v2`;
+    this.payload = {
+      grant_type: "refresh_token",
+      client_id: clientId,
+      client_secret: clientSecret,
+      refresh_token: refreshToken,
+    };
+
+    try {
+      const response = await fetch(this.endpoint, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(this.payload),
+      });
+
+      if (!response.ok) {
+        const errorBody = await response.json();
+        throw new Error(
+          `HTTP error! Status: ${response.status}, Details: ${JSON.stringify(
+            errorBody
+          )}`
+        );
+      }
+
+      const data = await response.json();
+      return { data, error: null };
+    } catch (error) {
+      return {
+        data: null,
+        error: error instanceof Error ? error : new Error(String(error)),
+      };
+    }
   }
 
   // Items
