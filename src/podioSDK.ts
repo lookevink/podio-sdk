@@ -34,6 +34,29 @@ export class podioClient {
     return this;
   }
 
+  filterItems(
+    appId: AppId,
+    filterOptions: {
+      sortBy?: string;
+      sortDesc?: boolean;
+      filters?: { [key: string]: any };
+      limit?: number;
+      offset?: number;
+      remember?: boolean;
+    }
+  ): this {
+    this.endpoint = `${this.baseUrl}/item/app/${appId}/filter/`;
+    this.payload = {
+      sort_by: filterOptions.sortBy,
+      sort_desc: filterOptions.sortDesc,
+      filters: filterOptions.filters,
+      limit: filterOptions.limit || 30,
+      offset: filterOptions.offset || 0,
+      remember: filterOptions.remember,
+    };
+    return this;
+  }
+
   getItemByExternalId(appId: AppId, externalId: string): this {
     this.endpoint = `${this.baseUrl}/item/app/${appId}/external_id/${externalId}`;
     return this;

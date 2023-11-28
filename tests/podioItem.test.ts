@@ -79,6 +79,26 @@ describe("podioSDK", () => {
     expect(data).toMatchObject({ title: "Test ESO Item", "last-name": "SDK" });
   });
 
+  it("should filter items and return matching", async () => {
+    const appId = 28578294;
+    const filterOptions = {
+      sortBy: "app_item_id",
+      // sortBy: "title",
+      sortDesc: true,
+      filters: { "motivation-level": [6] },
+      limit: 1000,
+    };
+
+    const { data, error } = await podio
+      .filterItems(appId, filterOptions)
+      .post();
+
+    console.log(data, error);
+
+    expect(error).toBeNull();
+    expect(data).toBeDefined();
+  }, 15000); //this one takes a while
+
   it("should get an item by external_id", async () => {
     const appId = 28578294;
     const externalId = "eso-sdk-test";
