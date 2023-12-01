@@ -157,10 +157,36 @@ describe("podioSDK", () => {
     expect(data).toBeDefined();
   });
 
+  it("should get apps by space id", async () => {
+    const spaceId = 8225207;
+    const { data, error } = await podio.getAppsBySpaceId(spaceId).get();
+
+    console.log(data, error);
+    expect(error).toBeNull();
+    expect(data).toBeDefined();
+  });
+
   it("get app by id", async () => {
     const appId = 28578294;
     const { data, error } = await podio.getAppById(appId).get();
 
+    expect(error).toBeNull();
+    expect(data).toBeDefined();
+  });
+
+  it("should get orgs", async () => {
+    const { data, error } = await podio.getOrganizations().get();
+
+    console.log(data, error);
+    expect(error).toBeNull();
+    expect(data).toBeDefined();
+  });
+
+  it("should get spaces", async () => {
+    const orgId = 866655;
+    const { data, error } = await podio.getSpacesByOrgId(orgId).get();
+
+    console.log(data, error);
     expect(error).toBeNull();
     expect(data).toBeDefined();
   });

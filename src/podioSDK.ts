@@ -145,6 +145,7 @@ export class podioClient {
     return this;
   }
 
+  // Apps
   getApps(): this {
     let queryParams: string[] = [];
 
@@ -156,8 +157,25 @@ export class podioClient {
     return this;
   }
 
+  getAppsBySpaceId(spaceId: number): this {
+    this.endpoint = `${this.baseUrl}/app/space/${spaceId}/`;
+    return this;
+  }
+
   getAppById(appId: AppId): this {
     this.endpoint = `${this.baseUrl}/app/${appId}`;
+    return this;
+  }
+
+  // Organizations
+  getOrganizations(): this {
+    this.endpoint = `${this.baseUrl}/org/`;
+    return this;
+  }
+
+  // Spaces
+  getSpacesByOrgId(orgId: number): this {
+    this.endpoint = `${this.baseUrl}/space/org/${orgId}/`;
     return this;
   }
 
