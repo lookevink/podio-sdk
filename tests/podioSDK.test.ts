@@ -161,7 +161,6 @@ describe("podioSDK", () => {
     const spaceId = 8225207;
     const { data, error } = await podio.getAppsBySpaceId(spaceId).get();
 
-    console.log(data, error);
     expect(error).toBeNull();
     expect(data).toBeDefined();
   });
@@ -185,6 +184,41 @@ describe("podioSDK", () => {
   it("should get spaces", async () => {
     const orgId = 866655;
     const { data, error } = await podio.getSpacesByOrgId(orgId).get();
+
+    console.log(data, error);
+    expect(error).toBeNull();
+    expect(data).toBeDefined();
+  });
+
+  it("should create a webhook", async () => {
+    const ref_type = "app";
+    const ref_id = 29195140;
+    const url = "https://eso-web.easystreetoffers.com/sync/1/";
+    const type = "item.create";
+
+    const { data, error } = await podio
+      .createHook(ref_type, ref_id, url, type)
+      .post();
+
+    console.log(data, error);
+    expect(error).toBeNull();
+    expect(data).toBeDefined();
+  });
+
+  it("should verify a hook", async () => {
+    const hookId = 123;
+    const code = "something";
+    const { data, error } = await podio.validateHook(hookId, code).post();
+
+    console.log(data, error);
+    expect(error).toBeNull();
+    expect(data).toBeDefined();
+  });
+
+  it("should get hooks", async () => {
+    const ref_type = "app";
+    const ref_id = 29195140;
+    const { data, error } = await podio.getHooks(ref_type, ref_id).get();
 
     console.log(data, error);
     expect(error).toBeNull();

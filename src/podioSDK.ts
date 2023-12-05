@@ -2,6 +2,13 @@ type ItemId = number;
 type AppId = number;
 type OAuthToken = string;
 
+interface ApiResponse {
+  data: any | null;
+  error: Error | null;
+  remaining_limit: number | null;
+  rate_limit: number | null;
+}
+
 export class podioClient {
   private baseUrl: string = "https://api.podio.com";
   private token: OAuthToken;
@@ -33,6 +40,7 @@ export class podioClient {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          "Cache-Control": "no-store, max-age=0",
         },
         body: JSON.stringify(this.payload),
       });
@@ -179,8 +187,31 @@ export class podioClient {
     return this;
   }
 
+  // Hooks
+  createHook(ref_type: string, ref_id: number, url: string, type: any): this {
+    this.endpoint = `${this.baseUrl}/hook/${ref_type}/${ref_id}`;
+    this.payload = {
+      ref_type: ref_type,
+      ref_id: ref_id,
+      url: url,
+      type: type,
+    };
+    return this;
+  }
+
+  validateHook(hookId: number, code: string): this {
+    this.endpoint = `${this.baseUrl}/hook/${hookId}/verify/validate`;
+    this.payload = { code: code };
+    return this;
+  }
+
+  getHooks(ref_type: string, ref_id: number): this {
+    this.endpoint = `${this.baseUrl}/hook/${ref_type}/${ref_id}`;
+    return this;
+  }
+
   //PUT
-  async put(): Promise<{ data: any | null; error: Error | null }> {
+  async put(): Promise<ApiResponse> {
     try {
       const response = await fetch(this.endpoint, {
         method: "PUT",
@@ -201,17 +232,28 @@ export class podioClient {
       }
 
       const data = await response.json();
-      return { data, error: null };
+      const remaining_limit = Number(
+        response.headers.get("X-Rate-Limit-Remaining")
+      );
+      const rate_limit = Number(response.headers.get("X-Rate-Limit-Limit"));
+      return {
+        data,
+        error: null,
+        remaining_limit: remaining_limit,
+        rate_limit: rate_limit,
+      };
     } catch (error) {
       return {
         data: null,
         error: error instanceof Error ? error : new Error(String(error)),
+        remaining_limit: null,
+        rate_limit: null,
       };
     }
   }
 
   //POST
-  async post(): Promise<{ data: any | null; error: Error | null }> {
+  async post(): Promise<ApiResponse> {
     try {
       const response = await fetch(this.endpoint, {
         method: "POST",
@@ -230,19 +272,29 @@ export class podioClient {
           )}`
         );
       }
-
       const data = await response.json();
-      return { data, error: null };
+      const remaining_limit = Number(
+        response.headers.get("X-Rate-Limit-Remaining")
+      );
+      const rate_limit = Number(response.headers.get("X-Rate-Limit-Limit"));
+      return {
+        data,
+        error: null,
+        remaining_limit: remaining_limit,
+        rate_limit: rate_limit,
+      };
     } catch (error) {
       return {
         data: null,
         error: error instanceof Error ? error : new Error(String(error)),
+        remaining_limit: null,
+        rate_limit: null,
       };
     }
   }
 
   //GET
-  async get(): Promise<{ data: any | null; error: Error | null }> {
+  async get(): Promise<ApiResponse> {
     try {
       const response = await fetch(this.endpoint, {
         method: "GET",
@@ -262,17 +314,28 @@ export class podioClient {
       }
 
       const data = await response.json();
-      return { data, error: null };
+      const remaining_limit = Number(
+        response.headers.get("X-Rate-Limit-Remaining")
+      );
+      const rate_limit = Number(response.headers.get("X-Rate-Limit-Limit"));
+      return {
+        data,
+        error: null,
+        remaining_limit: remaining_limit,
+        rate_limit: rate_limit,
+      };
     } catch (error) {
       return {
         data: null,
         error: error instanceof Error ? error : new Error(String(error)),
+        remaining_limit: null,
+        rate_limit: null,
       };
     }
   }
 
   //DELETE
-  async delete(): Promise<{ data: any | null; error: Error | null }> {
+  async delete(): Promise<ApiResponse> {
     try {
       const response = await fetch(this.endpoint, {
         method: "DELETE",
@@ -292,11 +355,22 @@ export class podioClient {
       }
 
       const data = await response.json();
-      return { data, error: null };
+      const remaining_limit = Number(
+        response.headers.get("X-Rate-Limit-Remaining")
+      );
+      const rate_limit = Number(response.headers.get("X-Rate-Limit-Limit"));
+      return {
+        data,
+        error: null,
+        remaining_limit: remaining_limit,
+        rate_limit: rate_limit,
+      };
     } catch (error) {
       return {
         data: null,
         error: error instanceof Error ? error : new Error(String(error)),
+        remaining_limit: null,
+        rate_limit: null,
       };
     }
   }
