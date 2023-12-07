@@ -40,8 +40,8 @@ export class podioClient {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "Cache-Control": "no-store, max-age=0",
         },
+        cache: "no-store",
         body: JSON.stringify(this.payload),
       });
 
