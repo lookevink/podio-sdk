@@ -153,6 +153,27 @@ export class podioClient {
     return this;
   }
 
+  getItemCount(
+    appId: AppId,
+    filters?: {
+      viewId?: number;
+      filterKey?: string;
+      filterValue?: string;
+    }
+  ): this {
+    const params: Record<string, string> = {};
+    if (filters?.viewId !== undefined) {
+      params["view_id"] = filters.viewId.toString();
+    }
+    if (filters?.filterKey && filters?.filterValue) {
+      params[filters.filterKey] = filters.filterValue;
+    }
+    this.endpoint = `${
+      this.baseUrl
+    }/item/app/${appId}/count?${new URLSearchParams(params).toString()}`;
+    return this;
+  }
+
   // Apps
   getApps(): this {
     let queryParams: string[] = [];

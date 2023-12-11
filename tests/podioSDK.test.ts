@@ -114,7 +114,35 @@ describe("podioSDK", () => {
 
     expect(error).toBeNull();
     expect(data).toBeDefined();
-  }, 15000); //this one takes a while
+  }, 15000);
+
+  it("should sort items based on created_on", async () => {
+    const appId = 29195140;
+    const filterOptions = {
+      sortBy: "created_on",
+      sort_desc: false,
+      limit: 500,
+    };
+
+    const { data, error } = await podio
+      .filterItems(appId, filterOptions)
+      .post();
+
+    console.log(data, error);
+
+    expect(error).toBeNull();
+    expect(data).toBeDefined();
+  }, 15000);
+
+  it("get item count in an app", async () => {
+    const appId = 28578294;
+    const { data, error } = await podio.getItemCount(appId).get();
+
+    console.log(data, error);
+
+    expect(error).toBeNull();
+    expect(data).toBeDefined();
+  });
 
   it("should get an item by external_id", async () => {
     const appId = 28578294;
