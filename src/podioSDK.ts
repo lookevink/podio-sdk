@@ -113,6 +113,11 @@ export class podioClient {
     return this;
   }
 
+  cloneItem(itemId: ItemId): this {
+    this.endpoint = `${this.baseUrl}/item/${itemId}/clone`;
+    return this;
+  }
+
   deleteItem(itemId: ItemId): this {
     this.endpoint = `${this.baseUrl}/item/${itemId}`;
     return this;
@@ -285,19 +290,21 @@ export class podioClient {
         body: JSON.stringify(this.payload),
       });
 
-      if (!response.ok) {
-        const errorBody = await response.json();
-        throw new Error(
-          `HTTP error! Status: ${response.status}, Details: ${JSON.stringify(
-            errorBody
-          )}`
-        );
+      if (
+        !response.ok ||
+        !response.headers.get("content-type")?.includes("application/json")
+      ) {
+        const rawResponse = await response.text();
+        console.error("Unexpected response:", rawResponse); // Log the raw response for debugging
+        throw new Error(`HTTP error! Status: ${response.status}`);
       }
+
       const data = await response.json();
       const remaining_limit = Number(
         response.headers.get("X-Rate-Limit-Remaining")
       );
       const rate_limit = Number(response.headers.get("X-Rate-Limit-Limit"));
+
       return {
         data,
         error: null,
